@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router';
-import Sidebar from '@/shared/components/Sidebar';
-import { useUiStore } from '@/shared/stores/uiStore';
-import { cn } from '@/shared/lib/utils';
+import { useUiStore } from '@/stores/uiStore';
+import { cn } from '@/lib/utils';
+import Sidebar from '@/components/Sidebar';
 
 const DashboardLayout = () => {
   const { sidebarCollapsed } = useUiStore();

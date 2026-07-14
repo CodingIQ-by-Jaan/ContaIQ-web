@@ -1,5 +1,5 @@
 import { Navigate, useLocation } from 'react-router';
-import { useAuth } from '@/shared/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';
 import { ShieldX } from 'lucide-react';
 
 const AuthGuard = ({ children }: { children: React.ReactNode }) => {

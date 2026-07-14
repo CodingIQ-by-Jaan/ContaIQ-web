@@ -1,5 +1,5 @@
 import { Bell, Menu } from 'lucide-react';
-import { useUiStore } from '@/shared/stores/uiStore';
+import { useUiStore } from '@/stores/uiStore';
 
 interface HeaderProps { title: string; subtitle?: string; actions?: React.ReactNode; }
 

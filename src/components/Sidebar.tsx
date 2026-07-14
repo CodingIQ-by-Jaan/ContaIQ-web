@@ -2,11 +2,12 @@ import { NavLink, useLocation } from 'react-router';
 import {
   LayoutDashboard, FolderTree, BookOpen, ShoppingCart, Receipt,
   Package, Landmark, FileCheck, BarChart3, Settings, ChevronLeft, LogOut,
+  FileSpreadsheet,
 } from 'lucide-react';
-import { useUiStore } from '@/shared/stores/uiStore';
-import { useAuth } from '@/shared/hooks/useAuth';
-import OrgSwitcher from '@/shared/components/OrgSwitcher';
-import { cn } from '@/shared/lib/utils';
+import { useUiStore } from '@/stores/uiStore';
+import { useAuth } from '@/hooks/useAuth';
+import { cn } from '@/lib/utils';
+import OrgSwitcher from './OrgSwitcher';
 
 interface NavItem {
   label: string;
@@ -21,6 +22,7 @@ const navigation: NavItem[] = [
   { label: 'Contabilidad', to: '/journal', icon: BookOpen, children: [
     { label: 'Libro Diario', to: '/journal' },
     { label: 'Libro Mayor', to: '/ledger' },
+    { label: 'Balance Comprobación', to: '/trial-balance' },
   ]},
   { label: 'Compras', to: '/purchases', icon: ShoppingCart, children: [
     { label: 'Compras', to: '/purchases' },
@@ -56,7 +58,6 @@ const Sidebar = () => {
       'fixed left-0 top-0 bottom-0 z-40 flex flex-col bg-surface border-r border-border transition-all duration-200',
       sidebarCollapsed ? 'w-[68px]' : 'w-[260px]',
     )}>
-      {/* Logo */}
       <div className="flex items-center justify-between px-4 h-16 border-b border-border">
         {!sidebarCollapsed && (
           <h1 className="text-xl font-bold text-brand-600 tracking-tight">
@@ -68,19 +69,19 @@ const Sidebar = () => {
         </button>
       </div>
 
-      {/* Org Switcher */}
       {!sidebarCollapsed && (
         <div className="px-2 py-3 border-b border-border">
           <OrgSwitcher />
         </div>
       )}
 
-      {/* Nav */}
       <nav className="flex-1 overflow-y-auto py-3 px-2">
         <ul className="space-y-0.5">
           {navigation.map((item) => {
             const Icon = item.icon;
-            const isActive = location.pathname === item.to || item.children?.some((c) => location.pathname.startsWith(c.to));
+            const isActive = location.pathname === item.to ||
+              location.pathname.startsWith(item.to + '/') ||
+              item.children?.some((c) => location.pathname === c.to || location.pathname.startsWith(c.to + '/'));
 
             return (
               <li key={item.to}>
@@ -112,7 +113,6 @@ const Sidebar = () => {
         </ul>
       </nav>
 
-      {/* User */}
       <div className="border-t border-border p-3">
         {!sidebarCollapsed ? (
           <div className="flex items-center gap-2">

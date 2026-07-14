@@ -1,5 +1,5 @@
 import { Construction } from 'lucide-react';
-import Header from '@/shared/components/Header';
+import Header from './Header';
 
 interface PlaceholderPageProps { title: string; phase: number; }
 

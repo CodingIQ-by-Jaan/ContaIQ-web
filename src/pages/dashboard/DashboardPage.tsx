@@ -1,7 +1,7 @@
 import { TrendingUp, TrendingDown, DollarSign, ShoppingCart, Receipt, Package, AlertTriangle } from 'lucide-react';
-import Header from '@/shared/components/Header';
-import { useAuth } from '@/shared/hooks/useAuth';
-import { formatLempiras } from '@/shared/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
+import { formatLempiras } from '@/lib/utils';
+import Header from '@/components/Header';
 
 interface KpiCardProps {
   title: string; value: string; change?: string; trend?: 'up' | 'down' | 'neutral';

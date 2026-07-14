@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { api } from '@/shared/api/client';
-import { useAuthStore } from '@/shared/stores/authStore';
+import { api } from '@/api/client';
+import { useAuthStore } from '@/stores/authStore';
 
 const DEPARTMENTS = [
   'Atlántida', 'Colón', 'Comayagua', 'Copán', 'Cortés', 'Choluteca',

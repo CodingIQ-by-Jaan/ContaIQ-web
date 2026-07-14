@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { useAuth } from '@/shared/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';
 
 const LoginPage = () => {
   const { signIn } = useAuth();

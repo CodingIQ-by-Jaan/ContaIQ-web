@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useAuth } from '@/shared/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';
 import { ChevronDown, Check } from 'lucide-react';
 
 const OrgSwitcher = () => {

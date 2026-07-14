@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Session } from '@supabase/supabase-js';
-import type { UserProfile, OrgMembership } from '@/shared/types';
+import type { UserProfile, OrgMembership } from '@/types';
 
 interface AuthState {
   session: Session | null;

@@ -1,8 +1,8 @@
 import { useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router';
-import { supabase } from '@/shared/api/supabase';
-import { api } from '@/shared/api/client';
-import { useAuthStore } from '@/shared/stores/authStore';
+import { supabase } from '@/api/supabase';
+import { api } from '@/api/client';
+import { useAuthStore } from '@/stores/authStore';
 
 export const useAuth = () => {
   const store = useAuthStore();

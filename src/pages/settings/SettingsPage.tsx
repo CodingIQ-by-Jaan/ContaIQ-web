@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { api } from '@/shared/api/client';
-import { useAuth } from '@/shared/hooks/useAuth';
-import Header from '@/shared/components/Header';
+import { api } from '@/api/client';
+import { useAuth } from '@/hooks/useAuth';
 import { UserPlus, Trash2 } from 'lucide-react';
-import { cn } from '@/shared/lib/utils';
+import { cn } from '@/lib/utils';
+import Header from '@/components/Header';
 
 const ROLE_LABELS: Record<string, string> = { OWNER: 'Propietario', ADMIN: 'Administrador', USER: 'Usuario', VIEWER: 'Solo lectura' };
 const ROLE_COLORS: Record<string, string> = { OWNER: 'bg-purple-100 text-purple-700', ADMIN: 'bg-blue-100 text-blue-700', USER: 'bg-green-100 text-green-700', VIEWER: 'bg-gray-100 text-gray-600' };
