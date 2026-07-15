@@ -6,7 +6,6 @@ import RegisterPage from '@/pages/auth/RegisterPage';
 import OnboardingPage from '@/pages/auth/OnboardingPage';
 import DashboardPage from '@/pages/dashboard/DashboardPage';
 import SettingsPage from '@/pages/settings/SettingsPage';
-import PlaceholderPage from '@/components/PlaceholderPage';
 import AccountsPage from '@/pages/accounts/AccountsPage';
 import JournalPage from '@/pages/journal/JournalPage';
 import JournalEntryFormPage from '@/pages/journal/JournalEntryFormPage';
@@ -18,15 +17,11 @@ import PurchaseFormPage from '@/pages/purchases/PurchaseFormPage';
 import CustomersPage from '@/pages/customers/CustomersPage';
 import SalesPage from '@/pages/sales/SalesPage';
 import SaleFormPage from '@/pages/sales/SaleFormPage';
-
 import ProductsPage from '@/pages/inventory/ProductsPage';
-
-const AdjustmentsPage = () => <PlaceholderPage title="Ajustes de Inventario" phase={4} />;
-const TreasuryPage = () => <PlaceholderPage title="Cuentas Bancarias" phase={5} />;
-const ReconciliationPage = () => <PlaceholderPage title="Conciliación Bancaria" phase={5} />;
-const TaxesIsvPage = () => <PlaceholderPage title="ISV" phase={5} />;
-const WithholdingsPage = () => <PlaceholderPage title="Retenciones" phase={5} />;
-const ReportsPage = () => <PlaceholderPage title="Reportes Financieros" phase={6} />;
+import TreasuryPage from '@/pages/treasury/TreasuryPage';
+import TaxesPage from '@/pages/taxes/TaxesPage';
+import BalanceSheetPage from '@/pages/reports/BalanceSheetPage';
+import IncomeStatementPage from '@/pages/reports/IncomeStatementPage';
 
 export const router = createBrowserRouter([
   { path: '/login', element: <LoginPage /> },
@@ -57,15 +52,17 @@ export const router = createBrowserRouter([
 
       // Phase 4
       { path: 'inventory', element: <ProductsPage /> },
-      { path: 'inventory/adjustments', element: <AdjustmentsPage /> },
 
-      // Phase 5+
+      // Phase 5
       { path: 'treasury', element: <TreasuryPage /> },
-      { path: 'treasury/reconciliation', element: <ReconciliationPage /> },
-      { path: 'taxes', element: <Navigate to="/taxes/isv" replace /> },
-      { path: 'taxes/isv', element: <TaxesIsvPage /> },
-      { path: 'taxes/withholdings', element: <WithholdingsPage /> },
-      { path: 'reports', element: <ReportsPage /> },
+      { path: 'taxes', element: <TaxesPage /> },
+
+      // Phase 6
+      { path: 'reports', element: <Navigate to="/reports/balance-sheet" replace /> },
+      { path: 'reports/balance-sheet', element: <BalanceSheetPage /> },
+      { path: 'reports/income-statement', element: <IncomeStatementPage /> },
+
+      // Settings
       { path: 'settings', element: <SettingsPage /> },
     ],
   },

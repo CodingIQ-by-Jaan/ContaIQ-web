@@ -2,12 +2,11 @@ import { NavLink, useLocation } from 'react-router';
 import {
   LayoutDashboard, FolderTree, BookOpen, ShoppingCart, Receipt,
   Package, Landmark, FileCheck, BarChart3, Settings, ChevronLeft, LogOut,
-  FileSpreadsheet,
 } from 'lucide-react';
 import { useUiStore } from '@/stores/uiStore';
 import { useAuth } from '@/hooks/useAuth';
+import OrgSwitcher from '@/components/OrgSwitcher';
 import { cn } from '@/lib/utils';
-import OrgSwitcher from './OrgSwitcher';
 
 interface NavItem {
   label: string;
@@ -32,19 +31,13 @@ const navigation: NavItem[] = [
     { label: 'Ventas', to: '/sales' },
     { label: 'Clientes', to: '/customers' },
   ]},
-  { label: 'Inventario', to: '/inventory', icon: Package, children: [
-    { label: 'Productos', to: '/inventory' },
-    { label: 'Ajustes', to: '/inventory/adjustments' },
+  { label: 'Inventario', to: '/inventory', icon: Package },
+  { label: 'Tesorería', to: '/treasury', icon: Landmark },
+  { label: 'Impuestos', to: '/taxes', icon: FileCheck },
+  { label: 'Reportes', to: '/reports', icon: BarChart3, children: [
+    { label: 'Balance General', to: '/reports/balance-sheet' },
+    { label: 'Estado de Resultados', to: '/reports/income-statement' },
   ]},
-  { label: 'Tesorería', to: '/treasury', icon: Landmark, children: [
-    { label: 'Cuentas', to: '/treasury' },
-    { label: 'Conciliación', to: '/treasury/reconciliation' },
-  ]},
-  { label: 'Impuestos', to: '/taxes', icon: FileCheck, children: [
-    { label: 'ISV', to: '/taxes/isv' },
-    { label: 'Retenciones', to: '/taxes/withholdings' },
-  ]},
-  { label: 'Reportes', to: '/reports', icon: BarChart3 },
   { label: 'Configuración', to: '/settings', icon: Settings },
 ];
 
@@ -85,7 +78,7 @@ const Sidebar = () => {
 
             return (
               <li key={item.to}>
-                <NavLink to={item.to} className={cn(
+                <NavLink to={item.children ? item.children[0].to : item.to} className={cn(
                   'flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors',
                   isActive ? 'bg-brand-50 text-brand-700 font-medium' : 'text-text-secondary hover:bg-surface-hover hover:text-text-primary',
                 )} title={sidebarCollapsed ? item.label : undefined}>
