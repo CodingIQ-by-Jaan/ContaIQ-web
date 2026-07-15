@@ -57,9 +57,9 @@ const LoginPage = () => {
           </form>
         </div>
 
-        <p className="mt-6 text-center text-sm text-text-secondary">
+        {/* <p className="mt-6 text-center text-sm text-text-secondary">
           ¿No tienes cuenta? <Link to="/register" className="text-brand-600 font-medium hover:text-brand-700">Crear cuenta gratis</Link>
-        </p>
+        </p> */}
       </div>
     </div>
   );
