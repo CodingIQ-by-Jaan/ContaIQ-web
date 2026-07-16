@@ -9,8 +9,8 @@ import { formatLempiras } from '@/lib/utils';
 
 const ISV_RATE = 0.15;
 
-interface Item { id: string; productId: string; description: string; quantity: string; unitCost: string; applyIsv: boolean; }
-const emptyItem = (): Item => ({ id: crypto.randomUUID(), productId: '', description: '', quantity: '', unitCost: '', applyIsv: true });
+interface Item { id: string; productId: string; description: string; quantity: string; unitCost: string; isvRate: string; }
+const emptyItem = (): Item => ({ id: crypto.randomUUID(), productId: '', description: '', quantity: '', unitCost: '', isvRate: '15' });
 
 const PurchaseFormPage = () => {
   const navigate = useNavigate();
@@ -30,7 +30,11 @@ const PurchaseFormPage = () => {
       const updated = { ...i, [field]: value };
       if (field === 'productId' && value) {
         const product = products?.find((p: any) => p.id === value);
-        if (product) { updated.description = product.name; updated.unitCost = String(product.averageCost ?? 0); }
+        if (product) {
+          updated.description = product.name;
+          updated.unitCost = String(product.averageCost ?? 0);
+          updated.isvRate = String(parseFloat(product.isvRate ?? 15));
+        }
       }
       return updated;
     }));
@@ -39,7 +43,8 @@ const PurchaseFormPage = () => {
   const subtotal = items.reduce((s, i) => s + (parseFloat(i.quantity) || 0) * (parseFloat(i.unitCost) || 0), 0);
   const isvAmount = items.reduce((s, i) => {
     const lineSubtotal = (parseFloat(i.quantity) || 0) * (parseFloat(i.unitCost) || 0);
-    return s + (i.applyIsv ? lineSubtotal * ISV_RATE : 0);
+    const rate = parseFloat(i.isvRate) / 100;
+    return s + (lineSubtotal * rate);
   }, 0);
   const total = subtotal + isvAmount;
 
@@ -52,7 +57,7 @@ const PurchaseFormPage = () => {
     try {
       await createMutation.mutateAsync({
         supplierId, date, supplierInvoice: supplierInvoice || undefined,
-        items: validItems.map((i) => ({ productId: i.productId || undefined, description: i.description, quantity: parseFloat(i.quantity), unitCost: parseFloat(i.unitCost), applyIsv: i.applyIsv })),
+        items: validItems.map((i) => ({ productId: i.productId || undefined, description: i.description, quantity: parseFloat(i.quantity), unitCost: parseFloat(i.unitCost), isvRate: i.isvRate })),
       });
       navigate('/purchases');
     } catch (err: any) { setError(err.response?.data?.message?.[0] ?? 'Error'); }
@@ -87,7 +92,7 @@ const PurchaseFormPage = () => {
 
           <table className="w-full mb-4">
             <thead><tr className="border-b border-border text-xs text-text-secondary uppercase">
-              <th className="px-2 py-2 text-left">Producto</th><th className="px-2 py-2 text-left">Descripción</th><th className="px-2 py-2 text-right w-24">Cant.</th><th className="px-2 py-2 text-right w-32">Costo Unit.</th><th className="px-2 py-2 text-center w-16">ISV</th><th className="px-2 py-2 text-right w-32">Subtotal</th><th className="w-10"></th>
+              <th className="px-2 py-2 text-left w-[180px]">Producto</th><th className="px-2 py-2 text-left">Descripción</th><th className="px-2 py-2 text-left w-[80px]">Cant.</th><th className="px-2 py-2 text-left w-[120px]">Costo Unit.</th><th className="px-2 py-2 text-left w-[85px]">ISV</th><th className="px-2 py-2 text-right w-[100px]">Subtotal</th><th className="w-10"></th>
             </tr></thead>
             <tbody>
               {items.map((item) => {
@@ -101,7 +106,13 @@ const PurchaseFormPage = () => {
                     <td className="px-2 py-2"><input value={item.description} onChange={(e) => updateItem(item.id, 'description', e.target.value)} placeholder="Descripción *" className={inputClass} /></td>
                     <td className="px-2 py-2"><input type="number" min="0" step="1" value={item.quantity} onChange={(e) => updateItem(item.id, 'quantity', e.target.value)} className={`${inputClass} text-right font-mono`} /></td>
                     <td className="px-2 py-2"><input type="number" min="0" step="0.01" value={item.unitCost} onChange={(e) => updateItem(item.id, 'unitCost', e.target.value)} className={`${inputClass} text-right font-mono`} /></td>
-                    <td className="px-2 py-2 text-center"><input type="checkbox" checked={item.applyIsv} onChange={(e) => updateItem(item.id, 'applyIsv', e.target.checked)} className="rounded" /></td>
+                    <td className="px-2 py-2">
+                      <select value={item.isvRate} onChange={(e) => updateItem(item.id, 'isvRate', e.target.value)} className={`${inputClass} text-center min-w-[80px]`}>
+                        <option value="15">15%</option>
+                        <option value="18">18%</option>
+                        <option value="0">Exento</option>
+                      </select>
+                    </td>                    
                     <td className="px-2 py-2 text-right text-sm font-mono">{formatLempiras(lineSubtotal)}</td>
                     <td className="px-2 py-2"><button onClick={() => items.length > 1 && setItems(items.filter((i) => i.id !== item.id))} disabled={items.length <= 1} className="p-1 rounded hover:bg-red-50 text-text-muted hover:text-danger disabled:opacity-30"><Trash2 size={14} /></button></td>
                   </tr>

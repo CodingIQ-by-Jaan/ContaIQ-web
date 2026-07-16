@@ -9,15 +9,20 @@ const ProductsPage = () => {
   const { data: products, isLoading } = useProducts(search || undefined);
   const createMutation = useCreateProduct();
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ code: '', name: '', description: '', unit: 'unidad', salePrice: '', minStock: '0', isExempt: false, isService: false });
+  const [form, setForm] = useState({ code: '', name: '', description: '', unit: 'unidad', salePrice: '', minStock: '0', isvRate: '15', isService: false });
   const [error, setError] = useState('');
 
   const handleCreate = async () => {
     if (!form.code || !form.name) { setError('Código y nombre son requeridos'); return; }
     setError('');
     try {
-      await createMutation.mutateAsync({ ...form, salePrice: parseFloat(form.salePrice) || 0, minStock: parseFloat(form.minStock) || 0 });
-      setForm({ code: '', name: '', description: '', unit: 'unidad', salePrice: '', minStock: '0', isExempt: false, isService: false });
+      await createMutation.mutateAsync({ 
+        ...form,
+        salePrice: parseFloat(form.salePrice) || 0,
+        minStock: parseFloat(form.minStock) || 0,
+        isvRate: parseFloat(form.isvRate) 
+      });
+      setForm({ code: '', name: '', description: '', unit: 'unidad', salePrice: '', minStock: '0', isvRate: '15', isService: false });
       setShowForm(false);
     } catch (err: any) { setError(err.response?.data?.message?.[0] ?? 'Error'); }
   };
@@ -47,7 +52,13 @@ const ProductsPage = () => {
               </select>
               <input type="number" value={form.salePrice} onChange={(e) => setForm({ ...form, salePrice: e.target.value })} placeholder="Precio venta" className={`${inputClass} font-mono`} />
               <input type="number" value={form.minStock} onChange={(e) => setForm({ ...form, minStock: e.target.value })} placeholder="Stock mínimo" className={`${inputClass} font-mono`} />
-              <label className="flex items-center gap-2 text-sm text-text-secondary"><input type="checkbox" checked={form.isExempt} onChange={(e) => setForm({ ...form, isExempt: e.target.checked })} className="rounded" /> Exento ISV</label>
+              <div>
+                <select value={form.isvRate} onChange={(e) => setForm({ ...form, isvRate: e.target.value })} className={inputClass}>
+                  <option value="15">ISV 15%</option>
+                  <option value="18">ISV 18%</option>
+                  <option value="0">Exento</option>
+                </select>
+              </div>              
               <label className="flex items-center gap-2 text-sm text-text-secondary"><input type="checkbox" checked={form.isService} onChange={(e) => setForm({ ...form, isService: e.target.checked })} className="rounded" /> Es servicio</label>
             </div>
             <div className="flex gap-2">
@@ -91,7 +102,13 @@ const ProductsPage = () => {
                       </td>
                       <td className="px-4 py-3 text-sm text-right font-mono text-text-muted">{p.isService ? '—' : minStock.toFixed(0)}</td>
                       <td className="px-4 py-3 text-center">
-                        {p.isService ? <span className="text-xs px-2 py-0.5 rounded bg-purple-100 text-purple-700">Servicio</span> : p.isExempt ? <span className="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600">Exento</span> : <span className="text-xs px-2 py-0.5 rounded bg-green-100 text-green-700">Gravado</span>}
+                        {p.isService ? (
+                          <span className="text-xs px-2 py-0.5 rounded bg-purple-100 text-purple-700">Servicio</span>
+                        ) : parseFloat(p.isvRate) === 0 ? (
+                          <span className="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600">Exento</span>
+                        ) : (
+                          <span className="text-xs px-2 py-0.5 rounded bg-green-100 text-green-700">ISV {parseFloat(p.isvRate)}%</span>
+                        )}                      
                       </td>
                     </tr>
                   );

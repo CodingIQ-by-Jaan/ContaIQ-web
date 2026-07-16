@@ -2,33 +2,13 @@
 
 Frontend del sistema contable ContaIQ — React 19 + TypeScript + Tailwind v4.
 
-## Stack
-
-- **Vite 6** — Build tool
-- **React 19** — UI
-- **TypeScript 5** — Type safety
-- **Tailwind CSS v4** — Styling con design tokens
-- **Zustand 5** — Estado global
-- **TanStack Query 5** — Server state y cache
-- **React Router 7** — Routing
-- **Axios** — HTTP client
-- **Lucide React** — Iconografía
-- **Supabase Auth** — Login/Signup
-
-## Setup
+## Setup Local
 
 ```bash
-# 1. Instalar dependencias
 npm install
-
-# 2. Configurar variables de entorno
-cp .env.example .env
-
-# 3. Iniciar en desarrollo
-npm run dev
+cp .env.example .env       # Configurar variables
+npm run dev                 # http://localhost:5173
 ```
-
-La app estará en `http://localhost:5173`.
 
 ## Variables de Entorno
 
@@ -38,100 +18,120 @@ VITE_SUPABASE_URL=https://[proyecto].supabase.co
 VITE_SUPABASE_ANON_KEY=sb_publishable_...
 ```
 
+En producción (Vercel): `VITE_API_URL=https://contaiq-api-production.up.railway.app/api/v1`
+
+Las variables `VITE_` se inyectan en build time — cambios requieren redeploy.
+
 ## Estructura
 
 ```
 src/
 ├── app/                         # App root, router, providers
 │   ├── App.tsx
-│   ├── router.tsx
-│   └── providers.tsx
+│   ├── router.tsx               # Todas las rutas
+│   └── providers.tsx            # QueryClient + Toaster
 │
-├── pages/                       # Páginas organizadas por dominio
+├── pages/                       # Páginas por dominio
 │   ├── auth/                    # Login, Register, Onboarding
-│   ├── dashboard/               # Dashboard con KPIs
-│   ├── accounts/                # Catálogo de cuentas (árbol jerárquico)
+│   ├── dashboard/               # Dashboard con KPIs reales
+│   ├── accounts/                # Catálogo de cuentas (árbol)
 │   ├── journal/                 # Libro Diario, Mayor, Balance Comprobación
 │   ├── suppliers/               # Gestión de proveedores
 │   ├── customers/               # Gestión de clientes
-│   ├── purchases/               # Compras + formulario con ISV
-│   ├── sales/                   # Ventas + formulario con ISV + retenciones
-│   ├── inventory/               # Productos + stock + Kardex
-│   └── settings/                # Usuarios y organización
+│   ├── purchases/               # Compras + formulario (ISV auto)
+│   ├── sales/                   # Ventas + formulario (ISV + retención)
+│   ├── inventory/               # Productos + stock
+│   ├── treasury/                # Cuentas bancarias + movimientos
+│   ├── taxes/                   # ISV + retenciones
+│   ├── reports/                 # Balance General + Estado de Resultados
+│   └── settings/                # Usuarios + organización
 │
 ├── layouts/                     # DashboardLayout (Sidebar + Content)
 │
 ├── components/                  # Componentes globales
-│   ├── Sidebar.tsx              # Navegación colapsable
+│   ├── Sidebar.tsx
 │   ├── Header.tsx
-│   ├── AuthGuard.tsx            # Protección de rutas
-│   ├── OrgSwitcher.tsx          # Cambiar organización activa
+│   ├── AuthGuard.tsx
+│   ├── OrgSwitcher.tsx
 │   ├── PlaceholderPage.tsx
 │   └── PageHeader.tsx
 │
-├── hooks/                       # Hooks centralizados
-│   ├── useAuth.ts               # Auth + Supabase session
-│   ├── useAccounts.ts           # CRUD catálogo de cuentas
-│   ├── useJournal.ts            # Asientos, Mayor, Balance
-│   ├── useSuppliers.ts          # CRUD proveedores
-│   ├── useCustomers.ts          # CRUD clientes
-│   ├── usePurchases.ts          # Compras + confirmar
-│   ├── useSales.ts              # Ventas + confirmar
-│   └── useProducts.ts           # Productos + Kardex
+├── hooks/                       # Todos los hooks centralizados
+│   ├── useAuth.ts
+│   ├── useAccounts.ts
+│   ├── useJournal.ts
+│   ├── useSuppliers.ts
+│   ├── useCustomers.ts
+│   ├── usePurchases.ts
+│   ├── useSales.ts
+│   ├── useProducts.ts
+│   ├── useTreasury.ts
+│   ├── useTaxes.ts
+│   ├── useReports.ts
+│   └── useDashboard.ts
 │
-├── stores/                      # Zustand stores
-│   ├── authStore.ts             # Sesión, perfil, org activa
-│   └── uiStore.ts               # Sidebar collapsed
+├── stores/                      # Zustand
+│   ├── authStore.ts
+│   └── uiStore.ts
 │
-├── api/                         # Clientes HTTP
-│   ├── client.ts                # Axios con interceptores (token + org_id)
-│   └── supabase.ts              # Supabase client (solo auth)
+├── api/                         # HTTP clients
+│   ├── client.ts                # Axios (token + org_id interceptors)
+│   └── supabase.ts              # Supabase (solo auth)
 │
 ├── lib/
-│   └── utils.ts                 # cn(), formatLempiras(), formatDate(), formatRtn()
+│   └── utils.ts                 # cn(), formatLempiras(), formatDate()
 │
 ├── types/
-│   └── index.ts                 # Interfaces TypeScript (independientes del API)
+│   └── index.ts                 # Interfaces TypeScript
 │
 ├── styles/
-│   └── globals.css              # Tailwind v4 + design tokens ContaIQ
+│   └── globals.css              # Tailwind v4 + design tokens
 │
-└── main.tsx                     # Entry point
+└── main.tsx
 ```
 
 ## Rutas
 
 ```
-/login                  → Login
-/register               → Registro
-/onboarding             → Wizard crear organización
+/login                      → Login
+/register                   → Registro (desactivado en producción)
+/onboarding                 → Wizard crear organización
 
-/dashboard              → KPIs (placeholder datos)
-/accounts               → Catálogo de cuentas (árbol + seed hondureño)
-/journal                → Libro Diario (listado de asientos)
-/journal/new            → Crear asiento manual
-/ledger                 → Libro Mayor por cuenta
-/trial-balance          → Balance de Comprobación
-/suppliers              → CRUD proveedores
-/purchases              → Listado de compras
-/purchases/new          → Formulario nueva compra (ISV auto)
-/customers              → CRUD clientes
-/sales                  → Listado de ventas
-/sales/new              → Formulario nueva venta (ISV + retención)
-/inventory              → Productos + stock
-/settings               → Gestión de usuarios + invitaciones
+/dashboard                  → KPIs, gráfica 12 meses, top productos
+/accounts                   → Catálogo de cuentas (árbol + seed)
+/journal                    → Libro Diario
+/journal/new                → Crear asiento manual
+/ledger                     → Libro Mayor por cuenta
+/trial-balance              → Balance de Comprobación
+/suppliers                  → CRUD proveedores
+/purchases                  → Listado de compras
+/purchases/new              → Formulario nueva compra
+/customers                  → CRUD clientes
+/sales                      → Listado de ventas
+/sales/new                  → Formulario nueva venta
+/inventory                  → Productos + stock
+/treasury                   → Cuentas bancarias + movimientos
+/taxes                      → ISV + retenciones
+/reports/balance-sheet       → Balance General
+/reports/income-statement    → Estado de Resultados
+/settings                   → Usuarios + invitaciones
 ```
 
-## Conexión con API
+## Deploy (Vercel)
 
-El frontend se conecta al backend ContaIQ API via Axios. El interceptor agrega automáticamente el JWT y el `X-Organization-Id` a cada request leyendo del Zustand store.
+Requiere `vercel.json` en la raíz:
 
-- **Local:** `http://localhost:3000/api/v1`
-- **Producción:** `https://api.contaiq.com/api/v1`
-
-## Deploy
+```json
+{
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ]
+}
+```
 
 ```bash
 npm run build
 npx vercel --prod
 ```
+
+O push a GitHub — Vercel hace deploy automático.

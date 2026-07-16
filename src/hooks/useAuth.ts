@@ -9,15 +9,16 @@ export const useAuth = () => {
   const navigate = useNavigate();
   const initializedRef = useRef(false);
 
-  const fetchUserData = useCallback(async (accessToken: string) => {
+  const fetchUserData = useCallback(async (accessToken: string): Promise<boolean> => {
     try {
       const { data } = await api.get('/auth/me', {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
       store.setProfile(data.profile);
       store.setOrganizations(data.organizations);
+      return true;
     } catch {
-      // Profile doesn't exist yet
+      return false;
     }
   }, []);
 
@@ -25,34 +26,32 @@ export const useAuth = () => {
     if (initializedRef.current) return;
     initializedRef.current = true;
 
-    // Check initial session first
     supabase.auth.getSession().then(async ({ data: { session } }) => {
-      store.setSession(session);
-
       if (session) {
+        store.setSession(session);
         await fetchUserData(session.access_token);
       }
-
       store.setLoading(false);
     });
 
-    // Listen for future changes (login, logout, token refresh)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        // Skip INITIAL_SESSION since we handle it above
         if (event === 'INITIAL_SESSION') return;
 
-        store.setSession(session);
-
-        if (session && (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED')) {
+        if (event === 'SIGNED_IN' && session) {
+          store.setLoading(true);
+          store.setSession(session);
           await fetchUserData(session.access_token);
+          store.setLoading(false);
+        }
+
+        if (event === 'TOKEN_REFRESHED' && session) {
+          store.setSession(session);
         }
 
         if (event === 'SIGNED_OUT') {
           store.reset();
         }
-
-        store.setLoading(false);
       },
     );
 
@@ -60,8 +59,17 @@ export const useAuth = () => {
   }, []);
 
   const signIn = useCallback(async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) throw error;
+    store.setLoading(true);
+    try {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        store.setLoading(false);
+        throw error;
+      }
+    } catch (err) {
+      store.setLoading(false);
+      throw err;
+    }
   }, []);
 
   const signUp = useCallback(async (email: string, password: string, fullName: string) => {
@@ -69,21 +77,25 @@ export const useAuth = () => {
     if (error) throw error;
 
     if (data.session) {
+      store.setLoading(true);
       store.setSession(data.session);
 
       await api.post('/auth/profile', { fullName }, {
         headers: { Authorization: `Bearer ${data.session.access_token}` },
       });
+
+      await fetchUserData(data.session.access_token);
+      store.setLoading(false);
     }
 
     return data;
   }, []);
 
   const signOut = useCallback(async () => {
-      await supabase.auth.signOut({ scope: 'global' });
-      store.reset();
-      localStorage.clear();
-      window.location.href = '/login';
+    await supabase.auth.signOut({ scope: 'global' });
+    store.reset();
+    localStorage.clear();
+    window.location.href = '/login';
   }, []);
 
   return {

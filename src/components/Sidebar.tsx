@@ -2,6 +2,7 @@ import { NavLink, useLocation } from 'react-router';
 import {
   LayoutDashboard, FolderTree, BookOpen, ShoppingCart, Receipt,
   Package, Landmark, FileCheck, BarChart3, Settings, ChevronLeft, LogOut,
+  Wallet,
 } from 'lucide-react';
 import { useUiStore } from '@/stores/uiStore';
 import { useAuth } from '@/hooks/useAuth';
@@ -31,6 +32,7 @@ const navigation: NavItem[] = [
     { label: 'Ventas', to: '/sales' },
     { label: 'Clientes', to: '/customers' },
   ]},
+  { label: 'Gastos', to: '/expenses', icon: Wallet },
   { label: 'Inventario', to: '/inventory', icon: Package },
   { label: 'Tesorería', to: '/treasury', icon: Landmark },
   { label: 'Impuestos', to: '/taxes', icon: FileCheck },

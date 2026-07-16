@@ -22,6 +22,8 @@ import TreasuryPage from '@/pages/treasury/TreasuryPage';
 import TaxesPage from '@/pages/taxes/TaxesPage';
 import BalanceSheetPage from '@/pages/reports/BalanceSheetPage';
 import IncomeStatementPage from '@/pages/reports/IncomeStatementPage';
+import ExpensesPage from '@/pages/expenses /ExpensesPage';
+import ExpenseFormPage from '@/pages/expenses /ExpenseFormPage';
 
 export const router = createBrowserRouter([
   { path: '/login', element: <LoginPage /> },
@@ -34,35 +36,25 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to="/dashboard" replace /> },
       { path: 'dashboard', element: <DashboardPage /> },
-
-      // Phase 2
       { path: 'accounts', element: <AccountsPage /> },
       { path: 'journal', element: <JournalPage /> },
       { path: 'journal/new', element: <JournalEntryFormPage /> },
       { path: 'ledger', element: <LedgerPage /> },
       { path: 'trial-balance', element: <TrialBalancePage /> },
-
-      // Phase 3
       { path: 'suppliers', element: <SuppliersPage /> },
       { path: 'purchases', element: <PurchasesPage /> },
       { path: 'purchases/new', element: <PurchaseFormPage /> },
       { path: 'customers', element: <CustomersPage /> },
       { path: 'sales', element: <SalesPage /> },
       { path: 'sales/new', element: <SaleFormPage /> },
-
-      // Phase 4
       { path: 'inventory', element: <ProductsPage /> },
-
-      // Phase 5
       { path: 'treasury', element: <TreasuryPage /> },
       { path: 'taxes', element: <TaxesPage /> },
-
-      // Phase 6
       { path: 'reports', element: <Navigate to="/reports/balance-sheet" replace /> },
       { path: 'reports/balance-sheet', element: <BalanceSheetPage /> },
       { path: 'reports/income-statement', element: <IncomeStatementPage /> },
-
-      // Settings
+      { path: 'expenses', element: <ExpensesPage /> },
+      { path: 'expenses/new', element: <ExpenseFormPage /> },
       { path: 'settings', element: <SettingsPage /> },
     ],
   },
