@@ -9,7 +9,15 @@ import { formatLempiras } from '@/lib/utils';
 
 const ISV_RATE = 0.15;
 
-interface Item { id: string; productId: string; description: string; quantity: string; unitPrice: string; discountAmount: string; applyIsv: boolean; }
+interface Item {
+  id: string;
+  productId: string;
+  description: string;
+  quantity: string;
+  unitPrice: string;
+  discountAmount: string;
+  applyIsv: boolean;
+}
 const emptyItem = (): Item => ({ id: crypto.randomUUID(), productId: '', description: '', quantity: '', unitPrice: '', discountAmount: '0', applyIsv: true });
 
 const SaleFormPage = () => {
@@ -39,7 +47,8 @@ const SaleFormPage = () => {
   const subtotal = items.reduce((s, i) => s + (parseFloat(i.quantity) || 0) * (parseFloat(i.unitPrice) || 0), 0);
   const totalDiscount = items.reduce((s, i) => s + (parseFloat(i.discountAmount) || 0), 0);
   const isvAmount = items.reduce((s, i) => {
-    const lineSub = (parseFloat(i.quantity) || 0) * (parseFloat(i.unitPrice) || 0) - (parseFloat(i.discountAmount) || 0);
+    const lineSub =
+    (parseFloat(i.quantity) || 0) * (parseFloat(i.unitPrice) || 0) - (parseFloat(i.discountAmount) || 0);
     return s + (i.applyIsv ? lineSub * ISV_RATE : 0);
   }, 0);
   const withholding = parseFloat(withholdingAmount) || 0;
@@ -54,7 +63,14 @@ const SaleFormPage = () => {
       await createMutation.mutateAsync({
         customerId: customerId || undefined, date,
         withholdingAmount: withholding > 0 ? withholding : undefined,
-        items: validItems.map((i) => ({ productId: i.productId || undefined, description: i.description, quantity: parseFloat(i.quantity), unitPrice: parseFloat(i.unitPrice), discountAmount: parseFloat(i.discountAmount) || 0, applyIsv: i.applyIsv })),
+        items: validItems.map((i) => ({
+          productId: i.productId || undefined,
+          description: i.description,
+          quantity: parseFloat(i.quantity),
+          unitPrice: parseFloat(i.unitPrice),
+          discountAmount: parseFloat(i.discountAmount) || 0,
+          applyIsv: i.applyIsv }
+        )),
       });
       navigate('/sales');
     } catch (err: any) { setError(err.response?.data?.message?.[0] ?? 'Error'); }

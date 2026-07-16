@@ -12,7 +12,13 @@ export const useExpenseTemplates = () => {
 export const useCreateExpenseTemplate = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: { name: string; accountId: string; supplierId?: string; estimatedAmount?: number; applyIsv?: boolean }) =>
+    mutationFn: (data: {
+      name: string;
+      accountId: string;
+      supplierId?: string;
+      estimatedAmount?: number;
+      applyIsv?: boolean
+    }) =>
       api.post('/expense-templates', data).then((r) => r.data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['expense-templates'] }),
   });

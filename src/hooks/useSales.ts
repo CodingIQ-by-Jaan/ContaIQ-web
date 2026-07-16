@@ -32,7 +32,13 @@ interface SaleItem {
 export const useCreateSale = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: { customerId?: string; date: string; withholdingAmount?: number; notes?: string; items: SaleItem[] }) =>
+    mutationFn: (data: {
+      customerId?: string;
+      date: string;
+      withholdingAmount?: number;
+      notes?: string;
+      items: SaleItem[]
+    }) =>
       api.post('/sales', data).then((r) => r.data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['sales'] }),
   });

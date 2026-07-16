@@ -11,7 +11,16 @@ export const useCustomers = () => {
 export const useCreateCustomer = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: { name: string; rtn?: string; type?: string; email?: string; phone?: string; address?: string }) =>
+    mutationFn: (
+      data: {
+        name: string;
+        rtn?: string;
+        type?: string;
+        email?: string;
+        phone?: string;
+        address?: string
+      },
+    ) =>
       api.post('/customers', data).then((r) => r.data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['customers'] }),
   });

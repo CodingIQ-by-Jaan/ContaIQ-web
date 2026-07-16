@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Landmark, ArrowUpRight, ArrowDownRight, ArrowRightLeft, CheckCircle, Circle } from 'lucide-react';
+import { Plus, Landmark, ArrowRightLeft, CheckCircle, Circle } from 'lucide-react';
 import Header from '@/components/Header';
 import { useBankAccounts, useCreateBankAccount, useTransactions, useCreateTransaction, useCreateTransfer, useToggleReconciled } from '@/hooks/useTreasury';
 import { cn, formatLempiras, formatDate } from '@/lib/utils';
@@ -30,7 +30,10 @@ const TreasuryPage = () => {
 
   const handleCreateAccount = async () => {
     if (!accountForm.name) return;
-    await createAccountMutation.mutateAsync({ ...accountForm, initialBalance: parseFloat(accountForm.initialBalance) || 0 });
+    await createAccountMutation.mutateAsync({
+      ...accountForm,
+      initialBalance: parseFloat(accountForm.initialBalance) || 0 },
+    );
     setAccountForm({ name: '', bankName: '', accountNumber: '', accountType: 'checking', initialBalance: '0' });
     setShowNewAccount(false);
   };

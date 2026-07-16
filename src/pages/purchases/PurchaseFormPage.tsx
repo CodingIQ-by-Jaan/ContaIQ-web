@@ -7,9 +7,14 @@ import { useProducts } from '@/hooks/useProducts';
 import { useCreatePurchase } from '@/hooks/usePurchases';
 import { formatLempiras } from '@/lib/utils';
 
-const ISV_RATE = 0.15;
-
-interface Item { id: string; productId: string; description: string; quantity: string; unitCost: string; isvRate: string; }
+interface Item {
+  id: string;
+  productId: string;
+  description: string;
+  quantity: string;
+  unitCost: string;
+  isvRate: string;
+}
 const emptyItem = (): Item => ({ id: crypto.randomUUID(), productId: '', description: '', quantity: '', unitCost: '', isvRate: '15' });
 
 const PurchaseFormPage = () => {
@@ -57,7 +62,13 @@ const PurchaseFormPage = () => {
     try {
       await createMutation.mutateAsync({
         supplierId, date, supplierInvoice: supplierInvoice || undefined,
-        items: validItems.map((i) => ({ productId: i.productId || undefined, description: i.description, quantity: parseFloat(i.quantity), unitCost: parseFloat(i.unitCost), isvRate: i.isvRate })),
+        items: validItems.map((i) => ({
+          productId: i.productId || undefined,
+          description: i.description,
+          quantity: parseFloat(i.quantity),
+          unitCost: parseFloat(i.unitCost),
+          isvRate: i.isvRate,
+        })),
       });
       navigate('/purchases');
     } catch (err: any) { setError(err.response?.data?.message?.[0] ?? 'Error'); }
@@ -112,7 +123,7 @@ const PurchaseFormPage = () => {
                         <option value="18">18%</option>
                         <option value="0">Exento</option>
                       </select>
-                    </td>                    
+                    </td>
                     <td className="px-2 py-2 text-right text-sm font-mono">{formatLempiras(lineSubtotal)}</td>
                     <td className="px-2 py-2"><button onClick={() => items.length > 1 && setItems(items.filter((i) => i.id !== item.id))} disabled={items.length <= 1} className="p-1 rounded hover:bg-red-50 text-text-muted hover:text-danger disabled:opacity-30"><Trash2 size={14} /></button></td>
                   </tr>

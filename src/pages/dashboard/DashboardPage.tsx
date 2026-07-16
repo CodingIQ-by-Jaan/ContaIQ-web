@@ -5,7 +5,12 @@ import { useKpis, useRevenueVsExpenses, useTopProducts } from '@/hooks/useDashbo
 import { formatLempiras } from '@/lib/utils';
 
 interface KpiCardProps {
-  title: string; value: string; change?: number; icon: React.ElementType; iconColor: string; iconBg: string; subtitle?: string;
+  title: string;
+  value: string;
+  change?: number; icon: React.ElementType;
+  iconColor: string;
+  iconBg: string;
+  subtitle?: string;
 }
 
 const KpiCard = ({ title, value, change, icon: Icon, iconColor, iconBg, subtitle }: KpiCardProps) => (

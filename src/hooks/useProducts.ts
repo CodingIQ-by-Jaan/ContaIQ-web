@@ -20,7 +20,17 @@ export const useProduct = (id: string) => {
 export const useCreateProduct = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: { code: string; name: string; description?: string; unit?: string; costMethod?: string; salePrice: number; minStock?: number; isvRate?: number; isService?: boolean }) =>
+    mutationFn: (data: {
+      code: string;
+      name: string;
+      description?: string;
+      unit?: string;
+      costMethod?: string;
+      salePrice: number;
+      minStock?: number;
+      isvRate?: number;
+      isService?: boolean
+    }) =>
       api.post('/products', data).then((r) => r.data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['products'] }),
   });
@@ -29,7 +39,8 @@ export const useCreateProduct = () => {
 export const useUpdateProduct = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, ...data }: { id: string; name?: string; salePrice?: number; minStock?: number; isActive?: boolean }) =>
+    mutationFn: ({
+      id, ...data }: { id: string; name?: string; salePrice?: number; minStock?: number; isActive?: boolean }) =>
       api.patch(`/products/${id}`, data).then((r) => r.data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['products'] }),
   });

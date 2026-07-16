@@ -20,7 +20,13 @@ const SettingsPage = () => {
   const canManage = activeRole === 'OWNER' || activeRole === 'ADMIN';
 
   const fetchMembers = async () => {
-    try { const { data } = await api.get('/organizations/current/members'); setMembers(data); } catch {} finally { setLoading(false); }
+    try {
+      const { data } = await api.get('/organizations/current/members'); setMembers(data);
+    } catch {
+    /* empty */
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => { if (activeOrgId) fetchMembers(); }, [activeOrgId]);
@@ -36,7 +42,11 @@ const SettingsPage = () => {
 
   const handleRemove = async (memberId: string) => {
     if (!confirm('¿Remover este miembro?')) return;
-    try { await api.delete(`/organizations/current/members/${memberId}`); fetchMembers(); } catch {}
+    try {
+      await api.delete(`/organizations/current/members/${memberId}`); fetchMembers();
+    } catch {
+      /* empty */
+    }
   };
 
   return (

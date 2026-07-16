@@ -1,12 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useCallback, useRef } from 'react';
-import { useNavigate } from 'react-router';
 import { supabase } from '@/api/supabase';
 import { api } from '@/api/client';
 import { useAuthStore } from '@/stores/authStore';
 
 export const useAuth = () => {
   const store = useAuthStore();
-  const navigate = useNavigate();
   const initializedRef = useRef(false);
 
   const fetchUserData = useCallback(async (accessToken: string): Promise<boolean> => {

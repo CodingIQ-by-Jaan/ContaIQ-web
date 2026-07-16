@@ -16,11 +16,11 @@ const ProductsPage = () => {
     if (!form.code || !form.name) { setError('Código y nombre son requeridos'); return; }
     setError('');
     try {
-      await createMutation.mutateAsync({ 
+      await createMutation.mutateAsync({
         ...form,
         salePrice: parseFloat(form.salePrice) || 0,
         minStock: parseFloat(form.minStock) || 0,
-        isvRate: parseFloat(form.isvRate) 
+        isvRate: parseFloat(form.isvRate),
       });
       setForm({ code: '', name: '', description: '', unit: 'unidad', salePrice: '', minStock: '0', isvRate: '15', isService: false });
       setShowForm(false);
@@ -58,7 +58,7 @@ const ProductsPage = () => {
                   <option value="18">ISV 18%</option>
                   <option value="0">Exento</option>
                 </select>
-              </div>              
+              </div>
               <label className="flex items-center gap-2 text-sm text-text-secondary"><input type="checkbox" checked={form.isService} onChange={(e) => setForm({ ...form, isService: e.target.checked })} className="rounded" /> Es servicio</label>
             </div>
             <div className="flex gap-2">
@@ -108,7 +108,7 @@ const ProductsPage = () => {
                           <span className="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600">Exento</span>
                         ) : (
                           <span className="text-xs px-2 py-0.5 rounded bg-green-100 text-green-700">ISV {parseFloat(p.isvRate)}%</span>
-                        )}                      
+                        )}
                       </td>
                     </tr>
                   );

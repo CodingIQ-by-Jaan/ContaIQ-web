@@ -31,7 +31,10 @@ interface PurchaseItem {
 export const useCreatePurchase = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: { supplierId: string; date: string; supplierInvoice?: string; notes?: string; items: PurchaseItem[] }) =>
+    mutationFn: (data: {
+      supplierId: string;
+      date: string;
+      supplierInvoice?: string; notes?: string; items: PurchaseItem[] }) =>
       api.post('/purchases', data).then((r) => r.data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['purchases'] }),
   });

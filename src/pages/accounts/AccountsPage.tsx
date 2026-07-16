@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import {
-  ChevronRight, ChevronDown, Plus, Download, Trash2,
+  ChevronRight, ChevronDown, Download, Trash2,
   FolderTree, FileText, AlertCircle,
 } from 'lucide-react';
-import { useAccountsTree, useSeedAccounts, useCreateAccount, useDeleteAccount } from '../../hooks/useAccounts';
+import { useAccountsTree, useSeedAccounts, useDeleteAccount } from '../../hooks/useAccounts';
 import { cn } from '@/lib/utils';
 import Header from '@/components/Header';
 
@@ -24,7 +24,8 @@ interface AccountNode {
   children: AccountNode[];
 }
 
-const AccountRow = ({ account, level, onDelete }: { account: AccountNode; level: number; onDelete: (id: string) => void }) => {
+const AccountRow = ({ account, level, onDelete }:
+  { account: AccountNode; level: number; onDelete: (id: string) => void }) => {
   const [expanded, setExpanded] = useState(level < 2);
   const hasChildren = account.children.length > 0;
   const balance = parseFloat(account.currentBalance);
@@ -89,7 +90,7 @@ const AccountsPage = () => {
   const { data: tree, isLoading, error } = useAccountsTree();
   const seedMutation = useSeedAccounts();
   const deleteMutation = useDeleteAccount();
-  const [showForm, setShowForm] = useState(false);
+  // const [showForm, setShowForm] = useState(false);
 
   const isEmpty = !isLoading && (!tree || tree.length === 0);
 
@@ -150,7 +151,8 @@ const AccountsPage = () => {
             <FolderTree size={48} className="mx-auto text-text-muted opacity-30 mb-4" />
             <h3 className="text-lg font-medium text-text-primary mb-2">Sin catálogo de cuentas</h3>
             <p className="text-sm text-text-muted max-w-md mx-auto mb-6">
-              Carga el catálogo base hondureño con un click. Incluye cuentas de activo, pasivo, capital, ingresos, costos y gastos listas para usar.
+              Carga el catálogo base hondureño con un click.
+              Incluye cuentas de activo, pasivo, capital, ingresos, costos y gastos listas para usar.
             </p>
             <button
               onClick={handleSeed}

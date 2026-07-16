@@ -11,7 +11,13 @@ export const useBankAccounts = () => {
 export const useCreateBankAccount = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: { name: string; bankName?: string; accountNumber?: string; accountType?: string; initialBalance?: number }) =>
+    mutationFn: (data: {
+      name: string;
+      bankName?: string;
+      accountNumber?: string;
+      accountType?: string;
+      initialBalance?: number
+    }) =>
       api.post('/bank-accounts', data).then((r) => r.data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['bank-accounts'] }),
   });
@@ -25,7 +31,10 @@ export const useDeleteBankAccount = () => {
   });
 };
 
-export const useTransactions = (accountId: string, filters: { page?: number; startDate?: string; endDate?: string } = {}) => {
+export const useTransactions = (
+  accountId: string,
+  filters: { page?: number; startDate?: string; endDate?: string } = {},
+) => {
   const params = new URLSearchParams();
   if (filters.page) params.set('page', String(filters.page));
   if (filters.startDate) params.set('startDate', filters.startDate);
@@ -41,7 +50,15 @@ export const useTransactions = (accountId: string, filters: { page?: number; sta
 export const useCreateTransaction = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: { bankAccountId: string; date: string; type: string; amount: number; description: string; reference?: string; category?: string }) =>
+    mutationFn: (data: {
+      bankAccountId: string;
+      date: string;
+      type: string;
+      amount: number;
+      description: string;
+      reference?: string;
+      category?: string
+    }) =>
       api.post('/cash-transactions', data).then((r) => r.data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['transactions'] });
@@ -54,7 +71,13 @@ export const useCreateTransaction = () => {
 export const useCreateTransfer = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: { fromAccountId: string; toAccountId: string; date: string; amount: number; description?: string }) =>
+    mutationFn: (data: {
+      fromAccountId: string;
+      toAccountId: string;
+      date: string;
+      amount: number;
+      description?: string
+    }) =>
       api.post('/cash-transactions/transfer', data).then((r) => r.data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['transactions'] });

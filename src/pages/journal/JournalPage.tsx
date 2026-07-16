@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
-import { Plus, Check, X, Eye, BookOpen } from 'lucide-react';
+import { Plus, Check, X, BookOpen } from 'lucide-react';
 import { cn, formatLempiras, formatDate } from '@/lib/utils';
 import { useConfirmJournalEntry, useJournalEntries, useVoidJournalEntry } from '@/hooks/useJournal';
 import Header from '@/components/Header';

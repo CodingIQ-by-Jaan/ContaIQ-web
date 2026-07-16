@@ -11,7 +11,7 @@ const STATUS_LABELS: Record<string, string> = { DRAFT: 'Borrador', CONFIRMED: 'C
 const STATUS_COLORS: Record<string, string> = { DRAFT: 'bg-amber-100 text-amber-700', CONFIRMED: 'bg-green-100 text-green-700', VOIDED: 'bg-red-100 text-red-700' };
 
 const ExpensesPage = () => {
-  const [page, setPage] = useState(1);
+  const [page] = useState(1);
   const [tab, setTab] = useState<'expenses' | 'templates'>('expenses');
   const { data, isLoading } = useExpenses({ page });
   const { data: templates } = useExpenseTemplates();

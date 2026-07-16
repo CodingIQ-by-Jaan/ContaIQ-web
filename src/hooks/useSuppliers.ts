@@ -11,7 +11,14 @@ export const useSuppliers = () => {
 export const useCreateSupplier = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: { name: string; rtn?: string; email?: string; phone?: string; address?: string; contactName?: string }) =>
+    mutationFn: (data: {
+      name: string;
+      rtn?: string;
+      email?: string;
+      phone?: string;
+      address?: string;
+      contactName?: string
+    }) =>
       api.post('/suppliers', data).then((r) => r.data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['suppliers'] }),
   });

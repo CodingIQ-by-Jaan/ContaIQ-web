@@ -28,9 +28,9 @@ const ExpenseFormPage = () => {
   const [reference, setReference] = useState('');
   const [notes, setNotes] = useState('');
   const [error, setError] = useState('');
-  
+
   const expenseAccounts = (accounts ?? []).filter((a: any) => a.type === 'EXPENSE' && a.isDetail);
-  
+
   const subtotal = parseFloat(amount) || 0;
   const isvAmount = +(subtotal * parseFloat(isvRate) / 100).toFixed(2);
   const total = subtotal + isvAmount;
@@ -133,7 +133,9 @@ const ExpenseFormPage = () => {
               <label className={labelClass}>Pagar desde</label>
               <select value={bankAccountId} onChange={(e) => setBankAccountId(e.target.value)} className={inputClass}>
                 <option value="">Sin pagar aún (genera CxP)</option>
-                {(bankAccounts ?? []).map((a: any) => <option key={a.id} value={a.id}>{a.name} ({formatLempiras(parseFloat(a.currentBalance))})</option>)}
+                {(bankAccounts ?? []).map((a: any) =>
+                  <option key={a.id} value={a.id}>{a.name} ({formatLempiras(parseFloat(a.currentBalance))})</option>,
+                )}
               </select>
             </div>
           </div>
