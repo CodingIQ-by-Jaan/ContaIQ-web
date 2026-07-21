@@ -24,6 +24,8 @@ import BalanceSheetPage from '@/pages/reports/BalanceSheetPage';
 import IncomeStatementPage from '@/pages/reports/IncomeStatementPage';
 import ExpensesPage from '@/pages/expenses /ExpensesPage';
 import ExpenseFormPage from '@/pages/expenses /ExpenseFormPage';
+import CaiConfigPage from '@/pages/invoicing/CaiConfigPage';
+import InvoiceViewPage from '@/pages/invoicing/InvoiceViewPage';
 
 export const router = createBrowserRouter([
   { path: '/login', element: <LoginPage /> },
@@ -56,6 +58,8 @@ export const router = createBrowserRouter([
       { path: 'expenses', element: <ExpensesPage /> },
       { path: 'expenses/new', element: <ExpenseFormPage /> },
       { path: 'settings', element: <SettingsPage /> },
+      { path: 'invoicing', element: <CaiConfigPage /> },
+      { path: 'invoices/:saleId', element: <InvoiceViewPage /> },
     ],
   },
 ]);

@@ -3,6 +3,7 @@ import {
   LayoutDashboard, FolderTree, BookOpen, ShoppingCart, Receipt,
   Package, Landmark, FileCheck, BarChart3, Settings, ChevronLeft, LogOut,
   Wallet,
+  Shield,
 } from 'lucide-react';
 import { useUiStore } from '@/stores/uiStore';
 import { useAuth } from '@/hooks/useAuth';
@@ -36,6 +37,7 @@ const navigation: NavItem[] = [
   { label: 'Inventario', to: '/inventory', icon: Package },
   { label: 'Tesorería', to: '/treasury', icon: Landmark },
   { label: 'Impuestos', to: '/taxes', icon: FileCheck },
+  { label: 'Facturación', to: '/invoicing', icon: Shield },
   { label: 'Reportes', to: '/reports', icon: BarChart3, children: [
     { label: 'Balance General', to: '/reports/balance-sheet' },
     { label: 'Estado de Resultados', to: '/reports/income-statement' },

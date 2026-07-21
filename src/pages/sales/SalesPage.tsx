@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
-import { Plus, Check, Receipt } from 'lucide-react';
+import { Plus, Check, Receipt, FileText } from 'lucide-react';
 import Header from '@/components/Header';
 import { useSales, useConfirmSale } from '@/hooks/useSales';
 import { cn, formatLempiras, formatDate } from '@/lib/utils';
@@ -50,6 +50,16 @@ const SalesPage = () => {
                     <td className="px-4 py-3 text-sm text-right font-mono font-medium">{formatLempiras(parseFloat(s.total))}</td>
                     <td className="px-4 py-3 text-center"><span className={cn('px-2 py-0.5 rounded text-xs font-medium', STATUS_COLORS[s.status])}>{STATUS_LABELS[s.status]}</span></td>
                     <td className="px-4 py-3">{s.status === 'DRAFT' && <button onClick={() => handleConfirm(s.id)} className="p-1 rounded hover:bg-green-50 text-text-muted hover:text-success"><Check size={16} /></button>}</td>
+                    <td className="px-4 py-3 text-sm">
+                      {s.invoiceNumber ? (
+                        <Link to={`/invoices/${s.id}`} className="flex items-center gap-1 text-brand-600 hover:text-brand-700 font-mono text-xs">
+                          <FileText size={12} />
+                          {s.invoiceNumber}
+                        </Link>
+                      ) : (
+                        <span className="text-text-muted text-xs">—</span>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
